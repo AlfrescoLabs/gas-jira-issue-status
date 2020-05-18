@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <?!= include('DialogStyle') ?>
+    <script type="text/javascript">
+      var jiraUrl = "<?= getJIRAUrl() ?>";
+      function dialogSave() {
+        google.script.run.withSuccessHandler(dialogClose)
+          .saveJIRAQuery(document.querySelector('textarea[name="jql"]').value);
+      }
+      function dialogClose() {
+        google.script.host.close();
+      }
+      function dialogRunPreview() {
+        var jql = document.querySelector('textarea[name="jql"]').value;
+        console.log(jql);
+        window.open(jiraUrl + '/issues/?jql=' + encodeURIComponent(jql), '_blank');
+        return false;
+      }
+    </script>
+  </head>
+  <body>
+    <textarea name="jql" value="" rows="5" cols="28"><?= getJIRAQuery() ?></textarea>
+    <div><a href="<?= getJIRAUrl() ?>" target="_blank" onclick="return dialogRunPreview()">Preview in JIRA</a></div>
+    <div>
+      <input type="button" value="Save" onclick="dialogSave()" />
+      <input type="button" value="Close" onclick="dialogClose()" />
+    </div>
+  </body>
+</html>

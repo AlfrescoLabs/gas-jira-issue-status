@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <?!= include('DialogStyle') ?>
+    <script type="text/javascript">
+      function dialogSave() {
+        var url = document.querySelector('input[name="url"]').value,
+            username = document.querySelector('input[name="username"]').value,
+            password = document.querySelector('input[name="password"]').value;
+        google.script.run.withSuccessHandler(dialogClose)
+          .saveConfluenceCredentials(url, username, password);
+      }
+      function dialogClose() {
+        google.script.host.close();
+      }
+      function showCredentialsOK(response) {
+        document.querySelector('.credentialsStatus').innerHTML = 'Tested credentials OK, logged in as ' +
+          response.displayName;
+      }
+      function showCredentialsFailed(response) {
+        document.querySelector('.credentialsStatus').innerHTML = 'Unable to log in with supplied credentials';
+      }
+      function dialogTestCredentials() {
+        var url = document.querySelector('input[name="url"]').value,
+            username = document.querySelector('input[name="username"]').value,
+            password = document.querySelector('input[name="password"]').value;
+        document.querySelector('.credentialsStatus').innerHTML = '';
+        google.script.run.withSuccessHandler(showCredentialsOK)
+          .withFailureHandler(showCredentialsFailed)
+          .testConfluenceCredentials(url, username, password);
+        return false;
+      }
+    </script>
+  </head>
+  <body>
+    <div><label>Confluence URL: <input type="text" name="url" value="<?= getConfluenceUrl() ?>"></label></div>
+    <div><label>Username: <input type="text" name="username" value="<?= getConfluenceUsername() ?>"></label></div>
+    <div><label>Password: <input type="password" name="password" value="<?= getConfluencePassword() ?>"></label></div>
+    <div><a href="#" target="_blank" onclick="return dialogTestCredentials()">Test Credentials</a></div>
+    <div class="credentialsStatus"></div>
+    <div>
+      <input type="button" value="Save" onclick="dialogSave()" />
+      <input type="button" value="Close" onclick="dialogClose()" />
+    </div>
+  </body>
+</html>
