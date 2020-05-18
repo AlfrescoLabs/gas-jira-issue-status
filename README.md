@@ -17,9 +17,6 @@ the following headings in row 1, columns A-C:
 In cell D1, add in the first date that you want to start tracking,
 usually this will be today's date.
 
-Open up the code editor by clicking *Tools* > *Script editor* and make a
-note of the project ID in the URL.
-
 Install [Google Clasp](https://github.com/google/clasp) if you do not
 have it installed and use `clasp login` to authenticate the tool.
 
